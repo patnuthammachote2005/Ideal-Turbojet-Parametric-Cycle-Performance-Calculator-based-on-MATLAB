@@ -89,7 +89,7 @@ for M_0 = M_0_voi
         S = f/F_by_mdot_0; % without afterburner
         S_result_matrix_M_0 = [S_result_matrix_M_0, S];
 
-        S_AB = f_tot/F_by_mdot_0; % with afterburner
+        S_AB = f_tot/F_by_mdot_0_AB; % with afterburner
         S_AB_result_matrix_M_0 = [S_AB_result_matrix_M_0, S_AB];
 
         eta_T = 1 - (1/(tau_r * tau_c)); % without afterburner
@@ -130,15 +130,6 @@ for i = 1:length(M_0_voi)
     plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('w/o afterburner (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
-%plot controls
-    pbaspect([1 1 1])
-    xlabel("$\pi_c$", 'Interpreter', 'latex')
-    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
-    title("Specific Thrust vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-    xlim([0, 40])
-    ylim([0, 1200])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
 
 %plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
 for i = 1:length(M_0_voi)
@@ -172,14 +163,14 @@ for i = 1:length(M_0_voi)
     hold("on")
 end
 %plot controls
-    pbaspect([1 1 1])
-    xlabel("$\pi_c$", 'Interpreter', 'latex')
-    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
-    title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-    xlim([0, 40])
-    ylim([2e-5, 4e-5])
+    %pbaspect([1 1 1])
+    %xlabel("$\pi_c$", 'Interpreter', 'latex')
+    %ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    %title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    %xlim([0, 40])
+    %ylim([2e-5, 4e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+    %legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
 
 %plot S against pi_c at different M_0_voi with afterburner
 for i = 1:length(M_0_voi)
