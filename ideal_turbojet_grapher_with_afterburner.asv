@@ -1,0 +1,389 @@
+%                               Disclaimers
+%       This code is based on the parametric cycle analysis of ideal 
+%   engines which will deviate from emperical datas and parametric cycle 
+%   analysis of real engines.
+
+%   For analysis of ideal engine cycles the following asumptions are made
+%   1) Isentropic (reversible & adiabatic compression and expansion exists
+%      at the inlet (diffuser), compressor, fan, turbine, and nozzle. Thus
+%      the following relationships are valid. tau_d = tau_n = 1, pi_d =
+%      pi_n = 1, tau_c = pi_c ^ ((gamma -1)/gamma), 
+%      tau_t = pi_t ^ ((gamma -1)/gamma)
+%   2) Constant-pressure combustion (pi_b = 1) is idealized as a heat
+%      interaction into the combustor. The fuel flowrate is much less than
+%      the airflow rate through the combustor such that mdot_f/mdot_c ~ 1
+%      and mdot_c + mdot_f = mdot_c
+%   3) The air, which is the working fluid, behaves as a perfect gas with
+%      constant specific heats.
+%   4) The engine nozzle expand the exhaust gas to ambient pressure (P_e =
+%      P_0).
+
+
+%input settings & flight conditions
+pi_c_start = 1; %define the starting range of interested compressor pressure ratio (design choice)
+pi_c_end = 40; %define the ending range of interested compressor pressure ratio (design choice)
+pi_c_resolution = 0.5; %define the resolution of data points
+
+pi_c_matrix = pi_c_start:pi_c_resolution:pi_c_end;
+pi_c_matrix_length = length(pi_c_matrix);
+pi_c_voi = [1, 2, 3, 5, 10, 20, 30]; %define the value of interest when plotting against M_0
+eta_pi_c_voi = [2,5,30]; %define the value of interest when plotting efficiencies Note: all inputs in this array must be the same as in pi_c_voi
+
+M_0_start = 0; %define the starting range of interested mach number
+M_0_end = 3; %define the ending range of interested mach number
+M_0_resolution = 0.1; %define the resolution of data points
+
+M_0_matrix = M_0_start:M_0_resolution:M_0_end;
+M_0_matrix_length = length(M_0_matrix);
+M_0_voi = [0, 0.5, 1, 1.5, 2, 2.5, 3]; %define the value of interest when plotting against pi_c
+eta_M_0_voi = [1,2,3]; %define the value of interest when plotting efficiencies Note: all inputs in this array must be the same as in M_0_voi
+
+T_0 = 216.667; %define free stream temperature (K)
+gamma = 1.4; %the heat capacity ratio. 1.4 for standard air assumptions.
+c_p = 1.004832 * 10^3; % J/(kg*K)
+h_PR = 42798.4 * 10^3; % J/(kg*K)
+T_t4 = 1666.667; %define turbine inlet temperature (K)
+T_t7 = 1973.15; %define the nozzle inlet temperature (K)
+g_c = 1; %define gravitational conversion factor (AKA Newton's Law proportionality constant) which is 1 for SI units
+
+%compute constant variables
+R = ((gamma - 1)/gamma) * c_p;
+a_0 = sqrt(gamma * R * g_c * T_0);
+tau_lambda = T_t4/T_0;
+tau_lambda_AB = T_t7/T_0;
+
+%compute variables over pi_c at different M_0 without afterburner & with afterburner
+F_by_mdot_0_result_matrix_M_0 = [];
+F_by_mdot_0_AB_result_matrix_M_0 = [];
+f_result_matrix_M_0 = [];
+f_tot_result_matrix_M_0 = [];
+S_result_matrix_M_0 = [];
+S_AB_result_matrix_M_0 = [];
+eta_T_result_matrix_M_0 = [];
+eta_T_AB_result_matrix_M_0 = [];
+eta_P_result_matrix_M_0 = [];
+eta_P_AB_result_matrix_M_0 = [];
+eta_O_result_matrix_M_0 = [];
+eta_O_AB_result_matrix_M_0 = [];
+
+for M_0 = M_0_voi
+    for pi_c = pi_c_start:pi_c_resolution:pi_c_end
+        tau_r = 1 + (((gamma - 1)/2) * M_0^2);
+        tau_c = (pi_c)^((gamma - 1)/gamma);
+        tau_t = 1 - (tau_r/tau_lambda) * (tau_c - 1);
+        v9_by_a_0 = sqrt(((2/(gamma - 1)) * (tau_lambda/(tau_r * tau_c)) * (tau_r * tau_c * tau_t - 1))); %without afterburner
+        v9_by_a_0_AB = sqrt(((2/(gamma - 1)) * tau_lambda_AB * (1-((tau_lambda/(tau_r * tau_c))/(tau_lambda - tau_r * (tau_c - 1)))))); %with after burner
+
+        F_by_mdot_0 = (a_0/g_c) * (v9_by_a_0 - M_0); % without afterburner
+        F_by_mdot_0_result_matrix_M_0 = [F_by_mdot_0_result_matrix_M_0, F_by_mdot_0];
+
+        F_by_mdot_0_AB = (a_0/g_c) * (v9_by_a_0_AB - M_0); % with afterburner
+        F_by_mdot_0_AB_result_matrix_M_0 = [F_by_mdot_0_AB_result_matrix_M_0, F_by_mdot_0_AB];
+
+        f = ((c_p * T_0)/(h_PR)) * (tau_lambda - tau_r * tau_c); % f without afterburner
+        f_result_matrix_M_0 = [f_result_matrix_M_0, f];
+
+        f_tot = ((c_p * T_0)/(h_PR)) * (tau_lambda_AB - tau_r); %f total with afterburner
+        f_tot_result_matrix_M_0 = [f_tot_result_matrix_M_0, f_tot];
+
+        S = f/F_by_mdot_0; % without afterburner
+        S_result_matrix_M_0 = [S_result_matrix_M_0, S];
+
+        S_AB = f_tot/F_by_mdot_0; % with afterburner
+        S_AB_result_matrix_M_0 = [S_AB_result_matrix_M_0, S_AB];
+
+        eta_T = 1 - (1/(tau_r * tau_c)); % without afterburner
+        eta_T_result_matrix_M_0 = [eta_T_result_matrix_M_0, eta_T * 100];
+
+        eta_T_AB = ((gamma - 1) * c_p * T_0 * (v9_by_a_0_AB^2 - M_0^2))/(2 * f_tot * h_PR); % with afterburner
+        eta_T_AB_result_matrix_M_0 = [eta_T_AB_result_matrix_M_0, eta_T_AB * 100];
+
+        eta_P = ((2 * M_0)/(v9_by_a_0 + M_0)); % without afterburner
+        eta_P_result_matrix_M_0 = [eta_P_result_matrix_M_0, eta_P * 100];
+
+        eta_P_AB = ((2 * M_0)/(v9_by_a_0_AB + M_0)); % with afterburner
+        eta_P_AB_result_matrix_M_0 = [eta_P_AB_result_matrix_M_0, eta_P_AB * 100];
+
+        eta_O = eta_P * eta_T; % without afterburner
+        eta_O_result_matrix_M_0 = [eta_O_result_matrix_M_0, eta_O * 100];
+
+        eta_O_AB = eta_P_AB * eta_T_AB; % afterburner
+        eta_O_AB_result_matrix_M_0 = [eta_O_AB_result_matrix_M_0, eta_O_AB * 100];
+    end
+end
+
+%-------------------------------------------------------------------------%
+
+%post processing & plotting
+
+windowSize = pi_c_matrix_length;
+Labels_pi_c_voi = strings(1,length(M_0_voi));
+figure
+
+%plot Fdot_by_mdot_0 against pi_c at different M_0_voi without afterburner
+for i = 1:length(M_0_voi)
+    Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(Fdot_by_mdot_0_result_subArray);
+    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-')
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
+    title("Specific Thrust vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    xlim([0, 40])
+    ylim([0, 1200])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+
+%plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
+for i = 1:length(M_0_voi)
+    Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(Fdot_by_mdot_0_result_subArray);
+    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--')
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
+    title("Specific Thrust vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    xlim([0, 40])
+    ylim([0, 1200])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    
+
+%plot S against pi_c at different M_0_voi
+figure
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(S_result_subArray);
+    plot(pi_c_matrix,S_result_subArray)
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    xlim([0, 40])
+    ylim([2e-5, 4e-5])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+
+
+%plot f against pi_c at different M_0_voi
+figure
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(f_result_subArray);
+    plot(pi_c_matrix,f_result_subArray)
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$f$", 'Interpreter', 'latex')
+    title("Fuel to Air ratio vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    xlim([0, 40])
+    ylim([0, 0.035])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    
+
+%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
+figure
+hold("on")
+
+% Plot eta_P
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_P_result_subArray = eta_P_result_matrix_M_0(startIdx:endIdx);
+    plot(pi_c_matrix, eta_P_result_subArray, 'DisplayName', sprintf('\\eta_P (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_T
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx);
+    plot(pi_c_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('\\eta_T (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_O
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx);
+    plot(pi_c_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot controls
+pbaspect([1 1 1])
+xlabel("$\pi_c$", 'Interpreter', 'latex')
+ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+xlim([0, 40])
+ylim([0, 100])
+legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+hold off
+
+%compute variables over M_0 at different pi_c
+F_by_mdot_0_result_matrix_M_0 = [];
+f_result_matrix_M_0 = [];
+S_result_matrix_M_0 = [];
+eta_T_result_matrix_M_0 = [];
+eta_P_result_matrix_M_0 = [];
+eta_O_result_matrix_M_0 = [];
+
+for pi_c = pi_c_voi
+    for M_0 = M_0_start:M_0_resolution:M_0_end
+        tau_r = 1 + (((gamma - 1)/2) * M_0^2);
+        tau_c = (pi_c)^((gamma - 1)/gamma);
+        tau_t = 1 - (tau_r/tau_lambda) * (tau_c - 1);
+        v9_by_a_0 = sqrt((2/(gamma - 1) * (tau_lambda/(tau_r * tau_c)) * (tau_r * tau_c * tau_t - 1)));
+        
+        F_by_mdot_0 = (a_0/g_c) * (v9_by_a_0 - M_0);
+        F_by_mdot_0_result_matrix_M_0 = [F_by_mdot_0_result_matrix_M_0, F_by_mdot_0];
+
+        f = ((c_p * T_0)/(h_PR)) * (tau_lambda - tau_r * tau_c);
+        f_result_matrix_M_0 = [f_result_matrix_M_0, f];
+
+        S = f/F_by_mdot_0;
+        S_result_matrix_M_0 = [S_result_matrix_M_0, S];
+
+        eta_T = 1 - (1/(tau_r * tau_c));
+        eta_T_result_matrix_M_0 = [eta_T_result_matrix_M_0, eta_T * 100];
+
+        eta_P = ((2 * M_0)/(v9_by_a_0 + M_0));
+        eta_P_result_matrix_M_0 = [eta_P_result_matrix_M_0, eta_P * 100];
+
+        eta_O = eta_P * eta_T;
+        eta_O_result_matrix_M_0 = [eta_O_result_matrix_M_0, eta_O * 100];
+    end
+end
+
+%post processing & plotting
+
+
+%plot Fdot_by_mdot_0 against M_0 at different pi_c_voi
+windowSize = M_0_matrix_length;
+Labels_pi_c_voi = strings(1,length(pi_c_voi));
+figure
+for i = 1:length(pi_c_voi)
+    Labels_pi_c_voi(i) = "\pi_c = " + pi_c_voi(i);
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(Fdot_by_mdot_0_result_subArray);
+    plot(M_0_matrix,Fdot_by_mdot_0_result_subArray)
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
+    title("Specific Thrust vs Mach Number","FontSize",11,"FontWeight","bold")
+    xlim([0, 3])
+    ylim([0, 1200])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+
+%plot S against M_0 at different pi_c_voi
+figure
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(S_result_subArray);
+    plot(M_0_matrix,S_result_subArray)
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    title("Specific Fuel Consumption vs Mach Number","FontSize",11,"FontWeight","bold")
+    xlim([0, 3])
+    ylim([2e-5, 4e-5])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+
+%plot f against M_0 at different pi_c_voi
+figure
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(f_result_subArray);
+    plot(M_0_matrix,f_result_subArray)
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$f$", 'Interpreter', 'latex')
+    title("Fuel to Air ratio vs Mach Number","FontSize",11,"FontWeight","bold")
+    xlim([0, 3])
+    ylim([0, 0.035])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+
+%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi
+figure
+hold("on")
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_P_result_subArray = eta_P_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(eta_P_result_subArray);
+    plot(M_0_matrix, eta_P_result_subArray, 'DisplayName', sprintf('\\eta_P (pi_c=%.1f)', eta_pi_c_voi(i)))
+    hold("on")
+end
+
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(eta_T_result_subArray);
+    plot(M_0_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('\\eta_T (pi_c=%.1f)', eta_pi_c_voi(i)))
+    hold("on")
+end
+
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(eta_O_result_subArray);
+    plot(M_0_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O (pi_c=%.1f)', eta_pi_c_voi(i)))
+    hold("on")
+end
+hold("off")
+% Plot controls
+pbaspect([1 1 1])
+xlabel("$M_0$", 'Interpreter', 'latex')
+ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Mach Number","FontSize",11,"FontWeight","bold")
+xlim([0, 3])
+ylim([0, 100])
+legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+hold off
