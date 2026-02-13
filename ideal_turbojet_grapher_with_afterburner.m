@@ -127,7 +127,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-')
+    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('w/o afterburner (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -138,7 +138,7 @@ end
     xlim([0, 40])
     ylim([0, 1200])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
 
 %plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
 for i = 1:length(M_0_voi)
@@ -147,7 +147,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--')
+    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('w/ afterburner (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -158,17 +158,17 @@ end
     xlim([0, 40])
     ylim([0, 1200])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
     
 
-%plot S against pi_c at different M_0_voi
+%plot S against pi_c at different M_0_voi without afterburner
 figure
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(pi_c_matrix,S_result_subArray)
+    plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('w/o afterburner (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -179,7 +179,7 @@ end
     xlim([0, 40])
     ylim([2e-5, 4e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
 
 
 %plot f against pi_c at different M_0_voi
@@ -189,7 +189,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(f_result_subArray);
-    plot(pi_c_matrix,f_result_subArray)
+    plot(pi_c_matrix,f_result_subArray, '-','DisplayName', sprintf('w/o afterburner (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -200,7 +200,7 @@ end
     xlim([0, 40])
     ylim([0, 0.035])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
     
 
 %plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
