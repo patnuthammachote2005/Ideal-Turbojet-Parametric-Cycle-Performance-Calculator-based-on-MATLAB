@@ -181,6 +181,25 @@ end
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
 
+%plot S against pi_c at different M_0_voi with afterburner
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_AB_result_subArray = S_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(S_result_subArray);
+    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('w/ afterburner (M_0=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    xlim([0, 40])
+    ylim([2e-5, 4e-5])
+    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+
 
 %plot f against pi_c at different M_0_voi
 figure
