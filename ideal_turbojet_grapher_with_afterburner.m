@@ -121,28 +121,25 @@ end
 %post processing & plotting
 
 windowSize = pi_c_matrix_length;
-Labels_pi_c_voi = strings(1,length(M_0_voi));
 
 %plot Fdot_by_mdot_0 against pi_c at different M_0_voi without afterburner
 figure
 for i = 1:length(M_0_voi)
-    Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
 %plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
 for i = 1:length(M_0_voi)
-    Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('$F/\\dot{m}_{0ab}$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('$F/\\dot{m}_{0ab}$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -163,7 +160,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     S_result_subArray = S_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('$S$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('$S$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -173,7 +170,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     S_AB_result_subArray = S_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('$S_{ab}$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('$S_{ab}$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -195,7 +192,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     f_result_subArray = f_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(f_result_subArray);
-    plot(pi_c_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -205,7 +202,7 @@ for i = 1:length(M_0_voi)
     endIdx = i * windowSize;
     f_AB_result_subArray = f_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(f_tot_result_subArray);
-    plot(pi_c_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -230,7 +227,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_P_result_subArray = eta_P_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('\\eta_P (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('$\\eta_P$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_P_AB
@@ -239,7 +236,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_P_AB_result_subArray = eta_P_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('\\eta_P_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('$\\eta_{Pab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_T
@@ -248,7 +245,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_T_result_subArray = eta_T_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('\\eta_T (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('$\\eta_T$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_T_AB
@@ -257,7 +254,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_T_AB_result_subArray = eta_T_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('\\eta_T_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{Tab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_O
@@ -266,7 +263,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_O_result_subArray = eta_O_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_O$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_O_AB
@@ -275,7 +272,7 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_O_AB_result_subArray = eta_O_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{Oab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot controls
@@ -285,7 +282,7 @@ ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
 xlim([0, 40])
 ylim([0, 100])
-legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 hold off
 
 %compute variables over M_0 at different pi_c
@@ -353,11 +350,10 @@ for pi_c = pi_c_voi
 end
 
 %post processing & plotting
-
-
-%plot Fdot_by_mdot_0 against M_0 at different pi_c_voi
 windowSize = M_0_matrix_length;
 Labels_pi_c_voi = strings(1,length(pi_c_voi));
+
+%plot Fdot_by_mdot_0 against M_0 at different pi_c_voi without afterburner
 figure
 for i = 1:length(pi_c_voi)
     Labels_pi_c_voi(i) = "\pi_c = " + pi_c_voi(i);
@@ -365,9 +361,21 @@ for i = 1:length(pi_c_voi)
     endIdx = i * windowSize;
     Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(M_0_matrix,Fdot_by_mdot_0_result_subArray)
+    plot(M_0_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ ($\\pi_c$=%.1f)', M_0_voi(i)))
     hold("on")
 end
+
+%plot Fdot_by_mdot_0 against M_0 at different pi_c_voi with afterburner
+for i = 1:length(pi_c_voi)
+    Labels_pi_c_voi(i) = "\pi_c = " + pi_c_voi(i);
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(Fdot_by_mdot_0_result_subArray);
+    plot(M_0_matrix,Fdot_by_mdot_0_AB_result_subArray, '--', 'DisplayName', sprintf('$F/\\dot{m}_{0ab}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
@@ -376,18 +384,29 @@ end
     xlim([0, 3])
     ylim([0, 1200])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
-%plot S against M_0 at different pi_c_voi
+%plot S against M_0 at different pi_c_voi without afterburner
 figure
 for i = 1:length(pi_c_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(M_0_matrix,S_result_subArray)
+    plot(M_0_matrix,S_result_subArray, '-', 'DisplayName', sprintf('$S$ ($\\pi_c$=%.1f)', M_0_voi(i)))
     hold("on")
 end
+
+%plot S against M_0 at different pi_c_voi with afterburner
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_AB_result_subArray = S_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(S_result_subArray);
+    plot(M_0_matrix,S_AB_result_subArray, '--', 'DisplayName', sprintf('$S_{ab}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
@@ -396,18 +415,29 @@ end
     xlim([0, 3])
     ylim([2e-5, 4e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
-%plot f against M_0 at different pi_c_voi
+%plot f against pi_c at different M_0_voi
 figure
 for i = 1:length(pi_c_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
     %disp(f_result_subArray);
-    plot(M_0_matrix,f_result_subArray)
+    plot(M_0_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ ($\\pi_c$=%.1f)', M_0_voi(i)))
     hold("on")
 end
+
+%plot f_AB against pi_c at different M_0_voi
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    f_AB_result_subArray = f_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    %disp(f_tot_result_subArray);
+    plot(M_0_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
@@ -416,41 +446,67 @@ end
     xlim([0, 3])
     ylim([0, 0.035])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend(Labels_pi_c_voi, 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
-%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi
+%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
 figure
 hold("on")
+
+% Plot eta_P
 for i = 1:length(eta_pi_c_voi)
     idx = find(pi_c_voi == eta_pi_c_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_P_result_subArray = eta_P_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(eta_P_result_subArray);
-    plot(M_0_matrix, eta_P_result_subArray, 'DisplayName', sprintf('\\eta_P (pi_c=%.1f)', eta_pi_c_voi(i)))
-    hold("on")
+    eta_P_result_subArray = eta_P_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('$\\eta_P$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 
+% Plot eta_P_AB
 for i = 1:length(eta_pi_c_voi)
     idx = find(pi_c_voi == eta_pi_c_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(eta_T_result_subArray);
-    plot(M_0_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('\\eta_T (pi_c=%.1f)', eta_pi_c_voi(i)))
-    hold("on")
+    eta_P_AB_result_subArray = eta_P_AB_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('$\\eta_{Pab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 
+% Plot eta_T
 for i = 1:length(eta_pi_c_voi)
     idx = find(pi_c_voi == eta_pi_c_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(eta_O_result_subArray);
-    plot(M_0_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O (pi_c=%.1f)', eta_pi_c_voi(i)))
-    hold("on")
+    eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('$\\eta_T$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+end
+
+% Plot eta_T_AB
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_AB_result_subArray = eta_T_AB_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{Tab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+end
+
+% Plot eta_O
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_O$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+end
+
+% Plot eta_O_AB
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_O_AB_result_subArray = eta_O_AB_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{Oab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 hold("off")
+
 % Plot controls
 pbaspect([1 1 1])
 xlabel("$M_0$", 'Interpreter', 'latex')
@@ -458,5 +514,5 @@ ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Mach Number","FontSize",11,"FontWeight","bold")
 xlim([0, 3])
 ylim([0, 100])
-legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 hold off
