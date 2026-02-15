@@ -53,19 +53,19 @@ tau_lambda = T_t4/T_0;
 tau_lambda_AB = T_t7/T_0;
 
 %compute variables over pi_c at different M_0 without afterburner & with afterburner
-F_by_mdot_0_result_matrix_M_0 = [];
-F_by_mdot_0_AB_result_matrix_M_0 = [];
-f_result_matrix_M_0 = [];
-f_tot_result_matrix_M_0 = [];
-f_AB_result_matrix_M_0 = [];
-S_result_matrix_M_0 = [];
-S_AB_result_matrix_M_0 = [];
-eta_T_result_matrix_M_0 = [];
-eta_T_AB_result_matrix_M_0 = [];
-eta_P_result_matrix_M_0 = [];
-eta_P_AB_result_matrix_M_0 = [];
-eta_O_result_matrix_M_0 = [];
-eta_O_AB_result_matrix_M_0 = [];
+F_by_mdot_0_result_matrix_pi_c = [];
+F_by_mdot_0_AB_result_matrix_pi_c = [];
+f_result_matrix_pi_c = [];
+f_tot_result_matrix_pi_c = [];
+f_AB_result_matrix_pi_c = [];
+S_result_matrix_pi_c = [];
+S_AB_result_matrix_pi_c = [];
+eta_T_result_matrix_pi_c = [];
+eta_T_AB_result_matrix_pi_c = [];
+eta_P_result_matrix_pi_c = [];
+eta_P_AB_result_matrix_pi_c = [];
+eta_O_result_matrix_pi_c = [];
+eta_O_AB_result_matrix_pi_c = [];
 
 for M_0 = M_0_voi
     for pi_c = pi_c_start:pi_c_resolution:pi_c_end
@@ -76,43 +76,43 @@ for M_0 = M_0_voi
         v9_by_a_0_AB = sqrt(((2/(gamma - 1)) * tau_lambda_AB * (1-((tau_lambda/(tau_r * tau_c))/(tau_lambda - tau_r * (tau_c - 1)))))); %with after burner
 
         F_by_mdot_0 = (a_0/g_c) * (v9_by_a_0 - M_0); % without afterburner
-        F_by_mdot_0_result_matrix_M_0 = [F_by_mdot_0_result_matrix_M_0, F_by_mdot_0];
+        F_by_mdot_0_result_matrix_pi_c = [F_by_mdot_0_result_matrix_pi_c, F_by_mdot_0];
 
         F_by_mdot_0_AB = (a_0/g_c) * (v9_by_a_0_AB - M_0); % with afterburner
-        F_by_mdot_0_AB_result_matrix_M_0 = [F_by_mdot_0_AB_result_matrix_M_0, F_by_mdot_0_AB];
+        F_by_mdot_0_AB_result_matrix_pi_c = [F_by_mdot_0_AB_result_matrix_pi_c, F_by_mdot_0_AB];
 
         f = ((c_p * T_0)/(h_PR)) * (tau_lambda - tau_r * tau_c); % f without afterburner
-        f_result_matrix_M_0 = [f_result_matrix_M_0, f];
+        f_result_matrix_pi_c = [f_result_matrix_pi_c, f];
 
         f_tot = ((c_p * T_0)/(h_PR)) * (tau_lambda_AB - tau_r); %f total with afterburner
-        f_tot_result_matrix_M_0 = [f_tot_result_matrix_M_0, f_tot];
+        f_tot_result_matrix_pi_c = [f_tot_result_matrix_pi_c, f_tot];
 
         f_AB = f_tot - f;
-        f_AB_result_matrix_M_0 = [f_AB_result_matrix_M_0, f_AB];
+        f_AB_result_matrix_pi_c = [f_AB_result_matrix_pi_c, f_AB];
 
         S = f/F_by_mdot_0; % without afterburner
-        S_result_matrix_M_0 = [S_result_matrix_M_0, S];
+        S_result_matrix_pi_c = [S_result_matrix_pi_c, S];
 
         S_AB = f_tot/F_by_mdot_0_AB; % with afterburner
-        S_AB_result_matrix_M_0 = [S_AB_result_matrix_M_0, S_AB];
+        S_AB_result_matrix_pi_c = [S_AB_result_matrix_pi_c, S_AB];
 
         eta_T = 1 - (1/(tau_r * tau_c)); % without afterburner
-        eta_T_result_matrix_M_0 = [eta_T_result_matrix_M_0, eta_T * 100];
+        eta_T_result_matrix_pi_c = [eta_T_result_matrix_pi_c, eta_T * 100];
 
         eta_T_AB = ((gamma - 1) * c_p * T_0 * (v9_by_a_0_AB^2 - M_0^2))/(2 * f_tot * h_PR); % with afterburner
-        eta_T_AB_result_matrix_M_0 = [eta_T_AB_result_matrix_M_0, eta_T_AB * 100];
+        eta_T_AB_result_matrix_pi_c = [eta_T_AB_result_matrix_pi_c, eta_T_AB * 100];
 
         eta_P = ((2 * M_0)/(v9_by_a_0 + M_0)); % without afterburner
-        eta_P_result_matrix_M_0 = [eta_P_result_matrix_M_0, eta_P * 100];
+        eta_P_result_matrix_pi_c = [eta_P_result_matrix_pi_c, eta_P * 100];
 
         eta_P_AB = ((2 * M_0)/(v9_by_a_0_AB + M_0)); % with afterburner
-        eta_P_AB_result_matrix_M_0 = [eta_P_AB_result_matrix_M_0, eta_P_AB * 100];
+        eta_P_AB_result_matrix_pi_c = [eta_P_AB_result_matrix_pi_c, eta_P_AB * 100];
 
         eta_O = eta_P * eta_T; % without afterburner
-        eta_O_result_matrix_M_0 = [eta_O_result_matrix_M_0, eta_O * 100];
+        eta_O_result_matrix_pi_c = [eta_O_result_matrix_pi_c, eta_O * 100];
 
         eta_O_AB = eta_P_AB * eta_T_AB; % afterburner
-        eta_O_AB_result_matrix_M_0 = [eta_O_AB_result_matrix_M_0, eta_O_AB * 100];
+        eta_O_AB_result_matrix_pi_c = [eta_O_AB_result_matrix_pi_c, eta_O_AB * 100];
     end
 end
 
@@ -129,9 +129,9 @@ for i = 1:length(M_0_voi)
     Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F$/$\dot{m}_0$ (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -140,9 +140,9 @@ for i = 1:length(M_0_voi)
     Labels_pi_c_voi(i) = "M_0 = " + M_0_voi(i);
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('w/ afterburner (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('$F/\\dot{m}_{0ab}$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
@@ -161,9 +161,9 @@ figure
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    S_result_subArray = S_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('w/o afterburner (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('$S$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -171,9 +171,9 @@ end
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    S_AB_result_subArray = S_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    S_AB_result_subArray = S_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(S_result_subArray);
-    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('w/ afterburner (M_0=%.1f)', M_0_voi(i)))
+    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('$S_{ab}$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
 end
 
@@ -185,7 +185,7 @@ end
     xlim([0, 40])
     ylim([2e-5, 4e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'tex')
+    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
 
 %plot f against pi_c at different M_0_voi
@@ -193,7 +193,7 @@ figure
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    f_result_subArray = f_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(f_result_subArray);
     plot(pi_c_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
@@ -203,7 +203,7 @@ end
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
-    f_AB_result_subArray = f_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    f_AB_result_subArray = f_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
     %disp(f_tot_result_subArray);
     plot(pi_c_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ (M_0=%.1f)', M_0_voi(i)))
     hold("on")
@@ -229,8 +229,17 @@ for i = 1:length(eta_M_0_voi)
     idx = find(M_0_voi == eta_M_0_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_P_result_subArray = eta_P_result_matrix_M_0(startIdx:endIdx);
-    plot(pi_c_matrix, eta_P_result_subArray, 'DisplayName', sprintf('\\eta_P (M_0=%.1f)', eta_M_0_voi(i)))
+    eta_P_result_subArray = eta_P_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('\\eta_P (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_P_AB
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_P_AB_result_subArray = eta_P_AB_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('\\eta_P_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_T
@@ -238,8 +247,17 @@ for i = 1:length(eta_M_0_voi)
     idx = find(M_0_voi == eta_M_0_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx);
+    eta_T_result_subArray = eta_T_result_matrix_pi_c(startIdx:endIdx);
     plot(pi_c_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('\\eta_T (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_T_AB
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_AB_result_subArray = eta_T_AB_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('\\eta_T_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_O
@@ -247,8 +265,17 @@ for i = 1:length(eta_M_0_voi)
     idx = find(M_0_voi == eta_M_0_voi(i));
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
-    eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx);
+    eta_O_result_subArray = eta_O_result_matrix_pi_c(startIdx:endIdx);
     plot(pi_c_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O (M_0=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_O_AB
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_O_AB_result_subArray = eta_O_AB_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('\\eta_O_{AB} (M_0=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot controls
@@ -263,36 +290,75 @@ hold off
 
 %compute variables over M_0 at different pi_c
 F_by_mdot_0_result_matrix_M_0 = [];
+F_by_mdot_0_AB_result_matrix_M_0 = [];
 f_result_matrix_M_0 = [];
+f_tot_result_matrix_M_0 = [];
+f_AB_result_matrix_M_0 = [];
 S_result_matrix_M_0 = [];
+S_AB_result_matrix_M_0 = [];
 eta_T_result_matrix_M_0 = [];
+eta_T_AB_result_matrix_M_0 = [];
 eta_P_result_matrix_M_0 = [];
+eta_P_AB_result_matrix_M_0 = [];
 eta_O_result_matrix_M_0 = [];
+eta_O_AB_result_matrix_M_0 = [];
 
 for pi_c = pi_c_voi
     for M_0 = M_0_start:M_0_resolution:M_0_end
         tau_r = 1 + (((gamma - 1)/2) * M_0^2);
         tau_c = (pi_c)^((gamma - 1)/gamma);
         tau_t = 1 - (tau_r/tau_lambda) * (tau_c - 1);
-        v9_by_a_0 = sqrt((2/(gamma - 1) * (tau_lambda/(tau_r * tau_c)) * (tau_r * tau_c * tau_t - 1)));
-        
-        F_by_mdot_0 = (a_0/g_c) * (v9_by_a_0 - M_0);
+        v9_by_a_0 = sqrt(((2/(gamma - 1)) * (tau_lambda/(tau_r * tau_c)) * (tau_r * tau_c * tau_t - 1))); %without afterburner
+        v9_by_a_0_AB = sqrt(((2/(gamma - 1)) * tau_lambda_AB * (1-((tau_lambda/(tau_r * tau_c))/(tau_lambda - tau_r * (tau_c - 1)))))); %with after burner
+
+        F_by_mdot_0 = (a_0/g_c) * (v9_by_a_0 - M_0); % without afterburner
         F_by_mdot_0_result_matrix_M_0 = [F_by_mdot_0_result_matrix_M_0, F_by_mdot_0];
 
-        f = ((c_p * T_0)/(h_PR)) * (tau_lambda - tau_r * tau_c);
+        F_by_mdot_0_AB = (a_0/g_c) * (v9_by_a_0_AB - M_0); % with afterburner
+        F_by_mdot_0_AB_result_matrix_pi_c = [F_by_mdot_0_AB_result_matrix_pi_c, F_by_mdot_0_AB];
+
+        f = ((c_p * T_0)/(h_PR)) * (tau_lambda - tau_r * tau_c); % f without afterburner
         f_result_matrix_M_0 = [f_result_matrix_M_0, f];
 
-        S = f/F_by_mdot_0;
+        f_tot = ((c_p * T_0)/(h_PR)) * (tau_lambda_AB - tau_r); %f total with afterburner
+        f_tot_result_matrix_pi_c = [f_tot_result_matrix_pi_c, f_tot];
+
+        f_AB = f_tot - f;
+        f_AB_result_matrix_pi_c = [f_AB_result_matrix_pi_c, f_AB];
+
+        S = f/F_by_mdot_0; % without afterburner
         S_result_matrix_M_0 = [S_result_matrix_M_0, S];
 
-        eta_T = 1 - (1/(tau_r * tau_c));
+        S_AB = f_tot/F_by_mdot_0_AB; % with afterburner
+        S_AB_result_matrix_pi_c = [S_AB_result_matrix_pi_c, S_AB];        
+
+        eta_T = 1 - (1/(tau_r * tau_c)); % without afterburner
         eta_T_result_matrix_M_0 = [eta_T_result_matrix_M_0, eta_T * 100];
 
-        eta_P = ((2 * M_0)/(v9_by_a_0 + M_0));
+        eta_T_AB = ((gamma - 1) * c_p * T_0 * (v9_by_a_0_AB^2 - M_0^2))/(2 * f_tot * h_PR); % with afterburner
+        eta_T_AB_result_matrix_pi_c = [eta_T_AB_result_matrix_pi_c, eta_T_AB * 100];
+       
+        eta_P = ((2 * M_0)/(v9_by_a_0 + M_0)); % without afterburner
         eta_P_result_matrix_M_0 = [eta_P_result_matrix_M_0, eta_P * 100];
+
 
         eta_O = eta_P * eta_T;
         eta_O_result_matrix_M_0 = [eta_O_result_matrix_M_0, eta_O * 100];
+
+
+
+
+
+        eta_P_result_matrix_pi_c = [eta_P_result_matrix_pi_c, eta_P * 100];
+
+        eta_P_AB = ((2 * M_0)/(v9_by_a_0_AB + M_0)); % with afterburner
+        eta_P_AB_result_matrix_pi_c = [eta_P_AB_result_matrix_pi_c, eta_P_AB * 100];
+
+        eta_O = eta_P * eta_T; % without afterburner
+        eta_O_result_matrix_pi_c = [eta_O_result_matrix_pi_c, eta_O * 100];
+
+        eta_O_AB = eta_P_AB * eta_T_AB; % afterburner
+        eta_O_AB_result_matrix_pi_c = [eta_O_AB_result_matrix_pi_c, eta_O_AB * 100];
     end
 end
 
