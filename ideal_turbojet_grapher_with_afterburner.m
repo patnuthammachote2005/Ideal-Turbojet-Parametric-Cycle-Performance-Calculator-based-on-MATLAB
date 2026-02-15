@@ -147,8 +147,9 @@ end
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
     title("Specific Thrust vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-    xlim([0, 40])
-    ylim([0, 1200])
+    xlim([pi_c_start, pi_c_end])
+    ylim(ylim .* [0.9, 1.1])
+    %ylim([0, 1200])
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
     
@@ -179,8 +180,8 @@ end
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
     title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-    xlim([0, 40])
-    ylim([2e-5, 4e-5])
+    xlim([pi_c_start, pi_c_end])
+    ylim([2e-5, 5e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
@@ -211,8 +212,8 @@ end
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$f$", 'Interpreter', 'latex')
     title("Fuel to Air ratio vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-    xlim([0, 40])
-    ylim([0, 0.035])
+    xlim([pi_c_start, pi_c_end])
+    ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
     
@@ -280,8 +281,8 @@ pbaspect([1 1 1])
 xlabel("$\pi_c$", 'Interpreter', 'latex')
 ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
-xlim([0, 40])
-ylim([0, 100])
+xlim([pi_c_start, pi_c_end])
+ylim(ylim .* [0.9, 1.1])
 legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 hold off
 
@@ -381,8 +382,8 @@ end
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
     title("Specific Thrust vs Mach Number","FontSize",11,"FontWeight","bold")
-    xlim([0, 3])
-    ylim([0, 1200])
+    xlim([M_0_start, M_0_end])
+    ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
@@ -412,9 +413,13 @@ end
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
     title("Specific Fuel Consumption vs Mach Number","FontSize",11,"FontWeight","bold")
-    xlim([0, 3])
-    ylim([2e-5, 4e-5])
+    xlim([M_0_start, M_0_end])
+    %S_expected_min = min(f_result_matrix_M_0) / max(F_by_mdot_0_result_matrix_M_0);
+    %S_expected_max = max(f_result_matrix_M_0) / min(F_by_mdot_0_result_matrix_M_0(F_by_mdot_0_result_matrix_M_0 > 0.1));
+    %ylim([S_expected_min * 0.8, S_expected_max * 1.2])
+    %ylim(2e-5,ylim(2)*0.08)
     %yticks([0 0.5 1 1.5 2 2.5 3])
+    ylim([2e-5, 7e-5])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
 %plot f against pi_c at different M_0_voi
@@ -443,8 +448,8 @@ end
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$f$", 'Interpreter', 'latex')
     title("Fuel to Air ratio vs Mach Number","FontSize",11,"FontWeight","bold")
-    xlim([0, 3])
-    ylim([0, 0.035])
+    xlim([M_0_start, M_0_end])
+    ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 
@@ -512,7 +517,7 @@ pbaspect([1 1 1])
 xlabel("$M_0$", 'Interpreter', 'latex')
 ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Mach Number","FontSize",11,"FontWeight","bold")
-xlim([0, 3])
-ylim([0, 100])
+xlim([M_0_start, M_0_end])
+ylim(ylim .* [0.9, 1.1])
 legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
 hold off
