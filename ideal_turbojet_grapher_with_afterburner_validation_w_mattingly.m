@@ -27,7 +27,7 @@ pi_c_resolution = 0.5; %define the resolution of data points
 pi_c_matrix = pi_c_start:pi_c_resolution:pi_c_end;
 pi_c_matrix_length = length(pi_c_matrix);
 pi_c_voi = [1, 2, 3, 5, 10, 20, 30]; %define the value of interest when plotting against M_0
-eta_pi_c_voi = [2,5,30]; %define the value of interest when plotting efficiencies Note: all inputs in this array must be the same as in pi_c_voi
+eta_pi_c_voi = [2,5,30]; %define the value of interest when plotting efficiencies Note: all inputs in this array must exist in pi_c_voi
 
 M_0_start = 0; %define the starting range of interested mach number
 M_0_end = 3; %define the ending range of interested mach number
@@ -36,14 +36,14 @@ M_0_resolution = 0.1; %define the resolution of data points
 M_0_matrix = M_0_start:M_0_resolution:M_0_end;
 M_0_matrix_length = length(M_0_matrix);
 M_0_voi = [0, 0.5, 1, 1.5, 2, 2.5, 3]; %define the value of interest when plotting against pi_c
-eta_M_0_voi = [1,2,3]; %define the value of interest when plotting efficiencies Note: all inputs in this array must be the same as in M_0_voi
+eta_M_0_voi = [1,2,3]; %define the value of interest when plotting efficiencies Note: all inputs in this array must exist in M_0_voi
 
 T_0 = 216.667; %define free stream temperature (K)
 gamma = 1.4; %the heat capacity ratio. 1.4 for standard air assumptions.
 c_p = 1.004832 * 10^3; % J/(kg*K)
-h_PR = 42798.4 * 10^3; % J/(kg*K)
+h_PR = 42798.400 * 10^3; % J/(kg*K)
 T_t4 = 1666.667; %define turbine inlet temperature (K)
-T_t7 = 1973.15; %define the nozzle inlet temperature (K)
+T_t7 = 2222.22; %define the nozzle inlet temperature (K)
 g_c = 1; %define gravitational conversion factor (AKA Newton's Law proportionality constant) which is 1 for SI units
 
 %compute constant variables
@@ -151,7 +151,7 @@ end
     ylim(ylim .* [0.9, 1.1])
     %ylim([0, 1200])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
     
 
 %plot S against pi_c at different M_0_voi without afterburner
@@ -183,7 +183,7 @@ end
     xlim([pi_c_start, pi_c_end])
     ylim([2e-5, 5e-5])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'best', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 
 %plot f against pi_c at different M_0_voi
@@ -215,7 +215,7 @@ end
     xlim([pi_c_start, pi_c_end])
     ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
     
 
 %plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
@@ -283,7 +283,7 @@ ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
 xlim([pi_c_start, pi_c_end])
 ylim(ylim .* [0.9, 1.1])
-legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 hold off
 
 %compute variables over M_0 at different pi_c
@@ -385,7 +385,7 @@ end
     xlim([M_0_start, M_0_end])
     ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 %plot S against M_0 at different pi_c_voi without afterburner
 figure
@@ -420,7 +420,7 @@ end
     %ylim(2e-5,ylim(2)*0.08)
     %yticks([0 0.5 1 1.5 2 2.5 3])
     ylim([2e-5, 7e-5])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 %plot f against pi_c at different M_0_voi
 figure
@@ -451,7 +451,7 @@ end
     xlim([M_0_start, M_0_end])
     ylim(ylim .* [0.9, 1.1])
     %yticks([0 0.5 1 1.5 2 2.5 3])
-    legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 %plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
 figure
@@ -519,5 +519,5 @@ ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
 title("Efficiencies vs Mach Number","FontSize",11,"FontWeight","bold")
 xlim([M_0_start, M_0_end])
 ylim(ylim .* [0.9, 1.1])
-legend('show', 'Location', 'northeast', 'Interpreter', 'latex')
+legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 hold off
