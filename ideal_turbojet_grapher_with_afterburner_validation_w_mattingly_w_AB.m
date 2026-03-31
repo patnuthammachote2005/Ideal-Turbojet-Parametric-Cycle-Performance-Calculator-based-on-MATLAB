@@ -26,8 +26,8 @@ pi_c_resolution = 0.5; %define the resolution of data points
 
 pi_c_matrix = pi_c_start:pi_c_resolution:pi_c_end;
 pi_c_matrix_length = length(pi_c_matrix);
-pi_c_voi = [2, 5, 10]; %define the value of interest when plotting against M_0
-eta_pi_c_voi = [2,5,10]; %define the value of interest when plotting efficiencies Note: all inputs in this array must exist in pi_c_voi
+pi_c_voi = [1, 2, 3, 5, 10, 20, 30]; %define the value of interest when plotting against M_0
+eta_pi_c_voi = [2,5,30]; %define the value of interest when plotting efficiencies Note: all inputs in this array must exist in pi_c_voi
 
 M_0_start = 0; %define the starting range of interested mach number
 M_0_end = 3; %define the ending range of interested mach number
@@ -128,29 +128,34 @@ for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(Fdot_by_mdot_0_result_subArray);
     plot(pi_c_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ ($M_0$=%.1f)', M_0_voi(i)))
-    hold("on")
-end
-
-%plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
-for i = 1:length(M_0_voi)
-    startIdx = (i - 1) * windowSize + 1;
-    endIdx = i * windowSize;
-    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(Fdot_by_mdot_0_result_subArray);
-    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '--','DisplayName', sprintf('$F/\\dot{m}_{0ab}$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
 %plot controls
     pbaspect([1 1 1])
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
-    title("Specific Thrust vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    title("Specific Thrust vs Compressor Pressure Ratio (No Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([pi_c_start, pi_c_end])
     ylim(ylim .* [0.9, 1.1])
-    %ylim([0, 1200])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot Fdot_by_mdot_0 against pi_c at different M_0_voi with afterburner
+figure
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
+    plot(pi_c_matrix,Fdot_by_mdot_0_AB_result_subArray, '-','DisplayName', sprintf('$F/\\dot{m}_{0,\\mathrm{AB}}$ ($M_0$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
+    title("Specific Thrust vs Compressor Pressure Ratio (With Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([pi_c_start, pi_c_end])
+    ylim(ylim .* [0.9, 1.1])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
     
 
@@ -160,65 +165,75 @@ for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     S_result_subArray = S_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(S_result_subArray);
     plot(pi_c_matrix,S_result_subArray, '-','DisplayName', sprintf('$S$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
-
-%plot S against pi_c at different M_0_voi with afterburner
-for i = 1:length(M_0_voi)
-    startIdx = (i - 1) * windowSize + 1;
-    endIdx = i * windowSize;
-    S_AB_result_subArray = S_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(S_result_subArray);
-    plot(pi_c_matrix,S_AB_result_subArray, '--','DisplayName', sprintf('$S_{ab}$ ($M_0$=%.1f)', M_0_voi(i)))
-    hold("on")
-end
-
 %plot controls
     pbaspect([1 1 1])
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
-    title("Specific Fuel Consumption vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    title("Specific Fuel Consumption vs Compressor Pressure Ratio (No Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([pi_c_start, pi_c_end])
     ylim([2e-5, 5e-5])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot S against pi_c at different M_0_voi with afterburner
+figure
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_AB_result_subArray = S_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
+    plot(pi_c_matrix,S_AB_result_subArray, '-','DisplayName', sprintf('$S_{\mathrm{AB}}$ ($M_0$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    title("Specific Fuel Consumption vs Compressor Pressure Ratio (With Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([pi_c_start, pi_c_end])
+    ylim([2e-5, 5e-5])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 
-%plot f against pi_c at different M_0_voi
+%plot f against pi_c at different M_0_voi without afterburner
 figure
 for i = 1:length(M_0_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     f_result_subArray = f_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(f_result_subArray);
     plot(pi_c_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ ($M_0$=%.1f)', M_0_voi(i)))
     hold("on")
 end
-
-%plot f_AB against pi_c at different M_0_voi
-for i = 1:length(M_0_voi)
-    startIdx = (i - 1) * windowSize + 1;
-    endIdx = i * windowSize;
-    f_AB_result_subArray = f_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
-    %disp(f_tot_result_subArray);
-    plot(pi_c_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ ($M_0$=%.1f)', M_0_voi(i)))
-    hold("on")
-end
-
 %plot controls
     pbaspect([1 1 1])
     xlabel("$\pi_c$", 'Interpreter', 'latex')
     ylabel("$f$", 'Interpreter', 'latex')
-    title("Fuel to Air ratio vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+    title("Fuel-to-Air Ratio vs Compressor Pressure Ratio (No Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([pi_c_start, pi_c_end])
     ylim(ylim .* [0.9, 1.1])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot f_AB against pi_c at different M_0_voi with afterburner
+figure
+for i = 1:length(M_0_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    f_AB_result_subArray = f_AB_result_matrix_pi_c(startIdx:endIdx); % Dynamic Range
+    plot(pi_c_matrix,f_AB_result_subArray, '-','DisplayName', sprintf('$f_{\mathrm{AB}}$ ($M_0$=%.1f)', M_0_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$\pi_c$", 'Interpreter', 'latex')
+    ylabel("$f_{\mathrm{AB}}$", 'Interpreter', 'latex')
+    title("Fuel-to-Air Ratio vs Compressor Pressure Ratio (With Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([pi_c_start, pi_c_end])
+    ylim(ylim .* [0.9, 1.1])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
     
 
-%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
+%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi without afterburner
 figure
 hold("on")
 
@@ -231,15 +246,6 @@ for i = 1:length(eta_M_0_voi)
     plot(pi_c_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('$\\eta_P$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
-% Plot eta_P_AB
-for i = 1:length(eta_M_0_voi)
-    idx = find(M_0_voi == eta_M_0_voi(i));
-    startIdx = (idx - 1) * windowSize + 1;
-    endIdx = idx * windowSize;
-    eta_P_AB_result_subArray = eta_P_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('$\\eta_{Pab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
-end
-
 % Plot eta_T
 for i = 1:length(eta_M_0_voi)
     idx = find(M_0_voi == eta_M_0_voi(i));
@@ -247,15 +253,6 @@ for i = 1:length(eta_M_0_voi)
     endIdx = idx * windowSize;
     eta_T_result_subArray = eta_T_result_matrix_pi_c(startIdx:endIdx);
     plot(pi_c_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('$\\eta_T$ ($M_0$=%.1f)', eta_M_0_voi(i)))
-end
-
-% Plot eta_T_AB
-for i = 1:length(eta_M_0_voi)
-    idx = find(M_0_voi == eta_M_0_voi(i));
-    startIdx = (idx - 1) * windowSize + 1;
-    endIdx = idx * windowSize;
-    eta_T_AB_result_subArray = eta_T_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{Tab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
 
 % Plot eta_O
@@ -266,6 +263,38 @@ for i = 1:length(eta_M_0_voi)
     eta_O_result_subArray = eta_O_result_matrix_pi_c(startIdx:endIdx);
     plot(pi_c_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_O$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
+hold("off")
+
+% Plot controls
+pbaspect([1 1 1])
+xlabel("$\pi_c$", 'Interpreter', 'latex')
+ylabel("$\eta_P$, $\eta_T$, $\eta_O$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Compressor Pressure Ratio (No Afterburner)","FontSize",11,"FontWeight","bold")
+xlim([pi_c_start, pi_c_end])
+ylim(ylim .* [0.9, 1.1])
+legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi with afterburner
+figure
+hold("on")
+
+% Plot eta_P_AB
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_P_AB_result_subArray = eta_P_AB_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_P_AB_result_subArray, '-', 'DisplayName', sprintf('$\\eta_{P,\\mathrm{AB}}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
+end
+
+% Plot eta_T_AB
+for i = 1:length(eta_M_0_voi)
+    idx = find(M_0_voi == eta_M_0_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_AB_result_subArray = eta_T_AB_result_matrix_pi_c(startIdx:endIdx);
+    plot(pi_c_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{T,\\mathrm{AB}}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
+end
 
 % Plot eta_O_AB
 for i = 1:length(eta_M_0_voi)
@@ -273,14 +302,15 @@ for i = 1:length(eta_M_0_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_O_AB_result_subArray = eta_O_AB_result_matrix_pi_c(startIdx:endIdx);
-    plot(pi_c_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{Oab}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
+    plot(pi_c_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{O,\\mathrm{AB}}$ ($M_0$=%.1f)', eta_M_0_voi(i)))
 end
+hold("off")
 
 % Plot controls
 pbaspect([1 1 1])
 xlabel("$\pi_c$", 'Interpreter', 'latex')
-ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
-title("Efficiencies vs Compressor Pressure Ratio","FontSize",11,"FontWeight","bold")
+ylabel("$\eta_{P,\mathrm{AB}}$, $\eta_{T,\mathrm{AB}}$, $\eta_{O,\mathrm{AB}}$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Compressor Pressure Ratio (With Afterburner)","FontSize",11,"FontWeight","bold")
 xlim([pi_c_start, pi_c_end])
 ylim(ylim .* [0.9, 1.1])
 legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
@@ -361,30 +391,35 @@ for i = 1:length(pi_c_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     Fdot_by_mdot_0_result_subArray = F_by_mdot_0_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(Fdot_by_mdot_0_result_subArray);
-    plot(M_0_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    plot(M_0_matrix,Fdot_by_mdot_0_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_0$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
     hold("on")
 end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
+    title("Specific Thrust vs Mach Number (No Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([M_0_start, M_0_end])
+    ylim(ylim .* [0.9, 1.1])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 %plot Fdot_by_mdot_0 against M_0 at different pi_c_voi with afterburner
+figure
 for i = 1:length(pi_c_voi)
     Labels_pi_c_voi(i) = "\pi_c = " + pi_c_voi(i);
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     Fdot_by_mdot_0_AB_result_subArray = F_by_mdot_0_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(Fdot_by_mdot_0_result_subArray);
-    plot(M_0_matrix,Fdot_by_mdot_0_AB_result_subArray, '--', 'DisplayName', sprintf('$F/\\dot{m}_{0ab}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    plot(M_0_matrix,Fdot_by_mdot_0_AB_result_subArray, '-', 'DisplayName', sprintf('$F/\\dot{m}_{0,\\mathrm{AB}}$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
     hold("on")
 end
-
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$F$/$\dot{m}_0$ [N/(kg/s)]", 'Interpreter', 'latex')
-    title("Specific Thrust vs Mach Number","FontSize",11,"FontWeight","bold")
+    title("Specific Thrust vs Mach Number (With Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([M_0_start, M_0_end])
     ylim(ylim .* [0.9, 1.1])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
 %plot S against M_0 at different pi_c_voi without afterburner
@@ -393,67 +428,73 @@ for i = 1:length(pi_c_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     S_result_subArray = S_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(S_result_subArray);
-    plot(M_0_matrix,S_result_subArray, '-', 'DisplayName', sprintf('$S$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    plot(M_0_matrix,S_result_subArray, '-', 'DisplayName', sprintf('$S$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
     hold("on")
 end
-
-%plot S against M_0 at different pi_c_voi with afterburner
-for i = 1:length(pi_c_voi)
-    startIdx = (i - 1) * windowSize + 1;
-    endIdx = i * windowSize;
-    S_AB_result_subArray = S_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(S_result_subArray);
-    plot(M_0_matrix,S_AB_result_subArray, '--', 'DisplayName', sprintf('$S_{ab}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
-    hold("on")
-end
-
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
-    title("Specific Fuel Consumption vs Mach Number","FontSize",11,"FontWeight","bold")
+    title("Specific Fuel Consumption vs Mach Number (No Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([M_0_start, M_0_end])
-    %S_expected_min = min(f_result_matrix_M_0) / max(F_by_mdot_0_result_matrix_M_0);
-    %S_expected_max = max(f_result_matrix_M_0) / min(F_by_mdot_0_result_matrix_M_0(F_by_mdot_0_result_matrix_M_0 > 0.1));
-    %ylim([S_expected_min * 0.8, S_expected_max * 1.2])
-    %ylim(2e-5,ylim(2)*0.08)
-    %yticks([0 0.5 1 1.5 2 2.5 3])
     ylim([2e-5, 7e-5])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
-%plot f against pi_c at different M_0_voi
+%plot S against M_0 at different pi_c_voi with afterburner
+figure
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    S_AB_result_subArray = S_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    plot(M_0_matrix,S_AB_result_subArray, '-', 'DisplayName', sprintf('$S_{\mathrm{AB}}$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$S$ [(mg/s)/N]", 'Interpreter', 'latex')
+    title("Specific Fuel Consumption vs Mach Number (With Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([M_0_start, M_0_end])
+    ylim([2e-5, 7e-5])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot f against M_0 at different pi_c_voi without afterburner
 figure
 for i = 1:length(pi_c_voi)
     startIdx = (i - 1) * windowSize + 1;
     endIdx = i * windowSize;
     f_result_subArray = f_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(f_result_subArray);
-    plot(M_0_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ ($\\pi_c$=%.1f)', M_0_voi(i)))
+    plot(M_0_matrix,f_result_subArray, '-','DisplayName', sprintf('$f$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
     hold("on")
 end
-
-%plot f_AB against pi_c at different M_0_voi
-for i = 1:length(pi_c_voi)
-    startIdx = (i - 1) * windowSize + 1;
-    endIdx = i * windowSize;
-    f_AB_result_subArray = f_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
-    %disp(f_tot_result_subArray);
-    plot(M_0_matrix,f_AB_result_subArray, '--','DisplayName', sprintf('$f_{AB}$ ($\\pi_c$=%.1f)', M_0_voi(i)))
-    hold("on")
-end
-
 %plot controls
     pbaspect([1 1 1])
     xlabel("$M_0$", 'Interpreter', 'latex')
     ylabel("$f$", 'Interpreter', 'latex')
-    title("Fuel to Air ratio vs Mach Number","FontSize",11,"FontWeight","bold")
+    title("Fuel-to-Air Ratio vs Mach Number (No Afterburner)","FontSize",11,"FontWeight","bold")
     xlim([M_0_start, M_0_end])
     ylim(ylim .* [0.9, 1.1])
-    %yticks([0 0.5 1 1.5 2 2.5 3])
     legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
 
-%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi%plot eta_P, eta_T and eta_O against pi_c at different M_0_voi
+%plot f_AB against M_0 at different pi_c_voi with afterburner
+figure
+for i = 1:length(pi_c_voi)
+    startIdx = (i - 1) * windowSize + 1;
+    endIdx = i * windowSize;
+    f_AB_result_subArray = f_AB_result_matrix_M_0(startIdx:endIdx); % Dynamic Range
+    plot(M_0_matrix,f_AB_result_subArray, '-','DisplayName', sprintf('$f_{\mathrm{AB}}$ ($\\pi_c$=%.1f)', pi_c_voi(i)))
+    hold("on")
+end
+%plot controls
+    pbaspect([1 1 1])
+    xlabel("$M_0$", 'Interpreter', 'latex')
+    ylabel("$f_{\mathrm{AB}}$", 'Interpreter', 'latex')
+    title("Fuel-to-Air Ratio vs Mach Number (With Afterburner)","FontSize",11,"FontWeight","bold")
+    xlim([M_0_start, M_0_end])
+    ylim(ylim .* [0.9, 1.1])
+    legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi without afterburner
 figure
 hold("on")
 
@@ -466,15 +507,6 @@ for i = 1:length(eta_pi_c_voi)
     plot(M_0_matrix, eta_P_result_subArray, '-', 'DisplayName', sprintf('$\\eta_P$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 
-% Plot eta_P_AB
-for i = 1:length(eta_pi_c_voi)
-    idx = find(pi_c_voi == eta_pi_c_voi(i));
-    startIdx = (idx - 1) * windowSize + 1;
-    endIdx = idx * windowSize;
-    eta_P_AB_result_subArray = eta_P_AB_result_matrix_M_0(startIdx:endIdx);
-    plot(M_0_matrix, eta_P_AB_result_subArray, '-',  'DisplayName', sprintf('$\\eta_{Pab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
-end
-
 % Plot eta_T
 for i = 1:length(eta_pi_c_voi)
     idx = find(pi_c_voi == eta_pi_c_voi(i));
@@ -482,15 +514,6 @@ for i = 1:length(eta_pi_c_voi)
     endIdx = idx * windowSize;
     eta_T_result_subArray = eta_T_result_matrix_M_0(startIdx:endIdx);
     plot(M_0_matrix, eta_T_result_subArray, '--', 'DisplayName', sprintf('$\\eta_T$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
-end
-
-% Plot eta_T_AB
-for i = 1:length(eta_pi_c_voi)
-    idx = find(pi_c_voi == eta_pi_c_voi(i));
-    startIdx = (idx - 1) * windowSize + 1;
-    endIdx = idx * windowSize;
-    eta_T_AB_result_subArray = eta_T_AB_result_matrix_M_0(startIdx:endIdx);
-    plot(M_0_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{Tab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 
 % Plot eta_O
@@ -501,6 +524,38 @@ for i = 1:length(eta_pi_c_voi)
     eta_O_result_subArray = eta_O_result_matrix_M_0(startIdx:endIdx);
     plot(M_0_matrix, eta_O_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_O$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
+hold("off")
+
+% Plot controls
+pbaspect([1 1 1])
+xlabel("$M_0$", 'Interpreter', 'latex')
+ylabel("$\eta_P$, $\eta_T$, $\eta_O$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Mach Number (No Afterburner)","FontSize",11,"FontWeight","bold")
+xlim([M_0_start, M_0_end])
+ylim(ylim .* [0.9, 1.1])
+legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
+
+%plot eta_P, eta_T and eta_O against M_0 at different pi_c_voi with afterburner
+figure
+hold("on")
+
+% Plot eta_P_AB
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_P_AB_result_subArray = eta_P_AB_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_P_AB_result_subArray, '-', 'DisplayName', sprintf('$\\eta_{P,\\mathrm{AB}}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+end
+
+% Plot eta_T_AB
+for i = 1:length(eta_pi_c_voi)
+    idx = find(pi_c_voi == eta_pi_c_voi(i));
+    startIdx = (idx - 1) * windowSize + 1;
+    endIdx = idx * windowSize;
+    eta_T_AB_result_subArray = eta_T_AB_result_matrix_M_0(startIdx:endIdx);
+    plot(M_0_matrix, eta_T_AB_result_subArray, '--', 'DisplayName', sprintf('$\\eta_{T,\\mathrm{AB}}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+end
 
 % Plot eta_O_AB
 for i = 1:length(eta_pi_c_voi)
@@ -508,15 +563,15 @@ for i = 1:length(eta_pi_c_voi)
     startIdx = (idx - 1) * windowSize + 1;
     endIdx = idx * windowSize;
     eta_O_AB_result_subArray = eta_O_AB_result_matrix_M_0(startIdx:endIdx);
-    plot(M_0_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{Oab}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
+    plot(M_0_matrix, eta_O_AB_result_subArray, '-.', 'DisplayName', sprintf('$\\eta_{O,\\mathrm{AB}}$ ($\\pi_c$=%.1f)', eta_pi_c_voi(i)))
 end
 hold("off")
 
 % Plot controls
 pbaspect([1 1 1])
 xlabel("$M_0$", 'Interpreter', 'latex')
-ylabel("$\eta_P$ $\eta_T$ $\eta_O$ [\%]", 'Interpreter', 'latex')
-title("Efficiencies vs Mach Number","FontSize",11,"FontWeight","bold")
+ylabel("$\eta_{P,\mathrm{AB}}$, $\eta_{T,\mathrm{AB}}$, $\eta_{O,\mathrm{AB}}$ [\%]", 'Interpreter', 'latex')
+title("Efficiencies vs Mach Number (With Afterburner)","FontSize",11,"FontWeight","bold")
 xlim([M_0_start, M_0_end])
 ylim(ylim .* [0.9, 1.1])
 legend('show', 'Location', 'bestoutside', 'Interpreter', 'latex')
